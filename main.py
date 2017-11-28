@@ -6,6 +6,8 @@ from models import (
     LoanException4,
 )
 from missioncap_parser import parse_into_loan
+from argparse import ArgumentParser
+
 
 LOAN_ID_FIELD = 'Loan ID'
 LOAN_GRADE_FIELD = 'Loan Grade'
@@ -43,8 +45,11 @@ def get_loan_report_rows(loans_with_exceptions):
 
 def main():
     # TODO: load this file name from CLI arguments
-    filename = 'loan_data.csv'
-    output_filename = 'loan_report.csv'
+    parser = get_argument_parser()
+    args = parser.parse_args()
+
+    output_filename = args.output
+    loan_database_filename = args.loan_database
 
     output_file_fields = (LOAN_ID_FIELD, LOAN_GRADE_FIELD, LOAN_EXCEPTIONS_FIELD)
 
@@ -56,13 +61,20 @@ def main():
     ]
 
     with open(output_filename, 'w') as output_file:
-        with open(filename, 'r') as loan_file:
+        with open(loan_database_filename, 'r') as loan_file:
             reader = DictReader(loan_file)
             writer = DictWriter(output_file, fieldnames=output_file_fields)
 
             parsed_loans = (parse_into_loan(row) for row in reader)
             loans_with_exceptions = get_exceptions_for_loans(parsed_loans, loan_exceptions)
             writer.writerows(get_loan_report_rows(loans_with_exceptions))
+
+
+def get_argument_parser():
+    parser = ArgumentParser()
+    parser.add_argument('loan_database')
+    parser.add_argument('output')
+    return parser
 
 
 if __name__ == '__main__':
