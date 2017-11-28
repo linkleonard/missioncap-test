@@ -1,6 +1,9 @@
 from unittest import TestCase
+from unittest.mock import patch
+from main import get_exceptions_for_loans
 from models import (
     Loan,
+    LoanException,
     LoanException1,
     LoanException2,
     LoanException3,
@@ -239,3 +242,42 @@ class LoanException3Test(TestCase):
                     penalty,
                     self.loan_exception.get_loan_penalty(loan)
                 )
+
+
+class BreakingLoanException(LoanException):
+    def broken_by_loan(self, loan):
+        return True
+
+    def get_loan_penalty(self, loan):
+        return 1
+
+
+class NonBreakingLoanException(LoanException):
+    def broken_by_loan(self, loan):
+        return False
+
+    def get_loan_penalty(self, loan):
+        return 0
+
+
+class GetExceptionsForLoans(TestCase):
+    def setUp(self):
+        self.loan = Loan()
+
+    def test(self):
+        loan_exceptions = [BreakingLoanException()]
+        loan, result_loan_exceptions = next(get_exceptions_for_loans([self.loan], loan_exceptions))
+
+        self.assertListEqual(
+            loan_exceptions,
+            list(result_loan_exceptions)
+        )
+
+    def test_no_matching_exceptions(self):
+        loan_exceptions = [NonBreakingLoanException()]
+        loan, result_loan_exceptions = next(get_exceptions_for_loans([self.loan], loan_exceptions))
+
+        self.assertListEqual(
+            [],
+            list(result_loan_exceptions)
+        )

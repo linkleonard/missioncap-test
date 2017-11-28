@@ -114,11 +114,3 @@ class LoanException4(LoanException):
         for index, maximum in enumerate(penalty_maximums):
             if percentage <= maximum:
                 return index
-
-
-loan_exceptions = [
-    LoanException1(id=1),
-    LoanException2(id=2),
-    LoanException3(id=3),
-    LoanException4(id=4),
-]
