@@ -1,5 +1,10 @@
 from csv import DictReader, DictWriter
-from models import Loan
+from models import (
+    LoanException1,
+    LoanException2,
+    LoanException3,
+    LoanException4,
+)
 from missioncap_parser import parse_into_loan
 
 LOAN_ID_FIELD = 'Loan ID'
@@ -39,6 +44,8 @@ def get_loan_report_rows(loans_with_exceptions):
 def main():
     # TODO: load this file name from CLI arguments
     filename = 'loan_data.csv'
+    output_filename = 'loan_report.csv'
+
     output_file_fields = (LOAN_ID_FIELD, LOAN_GRADE_FIELD, LOAN_EXCEPTIONS_FIELD)
 
     loan_exceptions = [
