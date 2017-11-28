@@ -1,13 +1,10 @@
 from csv import DictReader, DictWriter
-from .models import Loan, loan_exceptions
+from models import Loan, loan_exceptions
+from missioncap_parser import parse_into_loan
 
 LOAN_ID_FIELD = 'Loan ID'
 LOAN_GRADE_FIELD = 'Loan Grade'
 LOAN_EXCEPTIONS_FIELD = 'Exception IDs'
-
-
-def parse_into_loan(row):
-    raise NotImplemented()
 
 
 def get_exceptions_for_loans(loans):

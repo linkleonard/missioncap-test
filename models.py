@@ -1,7 +1,17 @@
 
 class Loan(object):
     def __init__(self):
-        raise NotImplemented()
+        self.id = None
+        self.maturity_date = None
+        self.completion_date = None
+        self.current_index = ''
+        self.current_margin = 0
+        self.current_ltv = 0
+        self.original_ltv = 0
+        self.cms = 0
+        self.current_interest_rate = 0
+        self.borrower_income_1 = 0
+        self.borrower_income_2 = 0
 
 
 class LoanException(object):
