@@ -40,7 +40,7 @@ class LoanException1(LoanException):
 class LoanException2(LoanException):
     def broken_by_loan(self, loan):
         return (
-            loan.current_index and
+            loan.current_index == 'FIX' and
             loan.current_margin != loan.current_interest_rate
         )
 

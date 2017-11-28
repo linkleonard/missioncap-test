@@ -124,7 +124,7 @@ class LoanException2Test(TestCase):
 
     def test_broken_by_loan_index_mismatch(self):
         loan = Loan()
-        loan.current_index = ''
+        loan.current_index = 'NOT-FIX'
         loan.current_margin = 5
         loan.current_interest_rate = 5
 
@@ -132,9 +132,9 @@ class LoanException2Test(TestCase):
 
     def test_broken_by_loan_margin_match(self):
         loan = Loan()
-        loan.current_index = 'FIX'
+        loan.current_index = 'NOT-FIX'
         loan.current_margin = 5
-        loan.current_interest_rate = 5
+        loan.current_interest_rate = 3
 
         self.assertFalse(self.loan_exception.broken_by_loan(loan))
 
