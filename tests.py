@@ -1,6 +1,6 @@
 from unittest import TestCase
 from unittest.mock import patch
-from main import get_exceptions_for_loans
+from main import get_exceptions_for_loans, get_loan_report_rows
 from models import (
     Loan,
     LoanException,
@@ -281,3 +281,19 @@ class GetExceptionsForLoans(TestCase):
             [],
             list(result_loan_exceptions)
         )
+
+
+class GetLoanReportRows(TestCase):
+    def setUp(self):
+        self.loan = Loan()
+        self.loan.id = 1
+
+    def test(self):
+        loans_with_exceptions = [
+            (self.loan, (BreakingLoanException(id=2), BreakingLoanException(id=1))),
+        ]
+        report_rows = get_loan_report_rows(loans_with_exceptions)
+        row = next(report_rows)
+        self.assertEqual(1, row['Loan ID'])
+        self.assertEqual(98, row['Loan Grade'])
+        self.assertEqual('1|2', row['Exception IDs'])

@@ -5,7 +5,7 @@ from missioncap_parser import parse_into_loan
 LOAN_ID_FIELD = 'Loan ID'
 LOAN_GRADE_FIELD = 'Loan Grade'
 LOAN_EXCEPTIONS_FIELD = 'Exception IDs'
-
+INITIAL_LOAN_GRADE = 100
 
 def get_exceptions_for_loans(loans, loan_exceptions):
     for loan in loans:
@@ -28,10 +28,11 @@ def get_loan_report_rows(loans_with_exceptions):
         )
         loan_grade = INITIAL_LOAN_GRADE - sum(grade_penalties)
 
+        sorted_exception_ids = sorted(loan_exception.id for loan_exception in exceptions)
         yield {
             LOAN_ID_FIELD: loan.id,
-            LOAN_GRADE_FIELD: load_grade,
-            LOAN_EXCEPTIONS_FIELD: '|'.join(loan_exception in exceptions)
+            LOAN_GRADE_FIELD: loan_grade,
+            LOAN_EXCEPTIONS_FIELD: '|'.join(str(exception_id) for exception_id in sorted_exception_ids)
         }
 
 
