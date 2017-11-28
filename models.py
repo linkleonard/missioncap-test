@@ -37,6 +37,24 @@ class LoanException1(LoanException):
         return 4
 
 
+class LoanException2(LoanException):
+    def broken_by_loan(self, loan):
+        return loan.current_index and loan.current_margin != loan.current_interest_rate
+
+    def get_loan_penalty(self, loan):
+        # Assume that loan always has a valid category
+        penalty_by_category = {
+            'U': 1,
+            'P': 1,
+            'N': 1,
+            'L': 2,
+            'M': 2,
+            'B': 3,
+        }
+        return penalty_by_category[loan.fitch_product_category]
+
+
 loan_exceptions = [
     LoanException1(id=1),
+    LoanException2(id=2),
 ]

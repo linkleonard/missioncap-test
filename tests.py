@@ -1,5 +1,5 @@
 from unittest import TestCase
-from models import Loan, LoanException1
+from models import Loan, LoanException1, LoanException2
 from missioncap_parser import parse_into_loan
 from datetime import date
 
@@ -99,3 +99,52 @@ class LoanException1Test(TestCase):
     def test_get_loan_penalty(self):
         loan = Loan()
         self.assertEqual(4, self.loan_exception.get_loan_penalty(loan))
+
+
+
+
+class LoanException2Test(TestCase):
+    def setUp(self):
+        self.loan_exception = LoanException2()
+
+    def test_broken_by_loan(self):
+        loan = Loan()
+        loan.current_index = 'FIX'
+        loan.current_margin = 5
+        loan.current_interest_rate = 3
+
+        self.assertTrue(self.loan_exception.broken_by_loan(loan))
+
+    def test_broken_by_loan_index_mismatch(self):
+        loan = Loan()
+        loan.current_index = ''
+        loan.current_margin = 5
+        loan.current_interest_rate = 5
+
+        self.assertFalse(self.loan_exception.broken_by_loan(loan))
+
+    def test_broken_by_loan_margin_match(self):
+        loan = Loan()
+        loan.current_index = 'FIX'
+        loan.current_margin = 5
+        loan.current_interest_rate = 5
+
+        self.assertFalse(self.loan_exception.broken_by_loan(loan))
+
+    def test_get_loan_penalty(self):
+        testcases = [
+            ('U', 1),
+            ('P', 1),
+            ('N', 1),
+            ('L', 2),
+            ('M', 2),
+            ('B', 3),
+        ]
+        for category, penalty in testcases:
+            with self.subTest(category=category):
+                loan = Loan()
+                loan.fitch_product_category = category
+                self.assertEqual(
+                    penalty,
+                    self.loan_exception.get_loan_penalty(loan)
+                )
