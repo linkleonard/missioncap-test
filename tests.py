@@ -1,5 +1,4 @@
 from unittest import TestCase
-from unittest.mock import patch
 from main import get_exceptions_for_loans, get_loan_report_rows
 from models import (
     Loan,
@@ -11,6 +10,7 @@ from models import (
 )
 from missioncap_parser import parse_into_loan
 from datetime import date
+
 
 # Tests go here.
 class ParseIntoLoanTest(TestCase):
@@ -110,8 +110,6 @@ class LoanException1Test(TestCase):
         self.assertEqual(4, self.loan_exception.get_loan_penalty(loan))
 
 
-
-
 class LoanException2Test(TestCase):
     def setUp(self):
         self.loan_exception = LoanException2()
@@ -203,7 +201,7 @@ class LoanException3Test(TestCase):
                 )
 
 
-class LoanException3Test(TestCase):
+class LoanException4Test(TestCase):
     def setUp(self):
         self.loan_exception = LoanException4()
 

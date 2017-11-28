@@ -14,6 +14,7 @@ LOAN_GRADE_FIELD = 'Loan Grade'
 LOAN_EXCEPTIONS_FIELD = 'Exception IDs'
 INITIAL_LOAN_GRADE = 100
 
+
 def get_exceptions_for_loans(loans, loan_exceptions):
     for loan in loans:
         exceptions = [
@@ -35,11 +36,18 @@ def get_loan_report_rows(loans_with_exceptions):
         )
         loan_grade = INITIAL_LOAN_GRADE - sum(grade_penalties)
 
-        sorted_exception_ids = sorted(loan_exception.id for loan_exception in exceptions)
+        sorted_exception_ids = sorted(
+            loan_exception.id
+            for loan_exception in exceptions
+        )
+
         yield {
             LOAN_ID_FIELD: loan.id,
             LOAN_GRADE_FIELD: loan_grade,
-            LOAN_EXCEPTIONS_FIELD: '|'.join(str(exception_id) for exception_id in sorted_exception_ids)
+            LOAN_EXCEPTIONS_FIELD: '|'.join(
+                str(exception_id)
+                for exception_id in sorted_exception_ids
+            )
         }
 
 
@@ -51,7 +59,11 @@ def main():
     output_filename = args.output
     loan_database_filename = args.loan_database
 
-    output_file_fields = (LOAN_ID_FIELD, LOAN_GRADE_FIELD, LOAN_EXCEPTIONS_FIELD)
+    output_file_fields = (
+        LOAN_ID_FIELD,
+        LOAN_GRADE_FIELD,
+        LOAN_EXCEPTIONS_FIELD,
+    )
 
     loan_exceptions = [
         LoanException1(id=1),

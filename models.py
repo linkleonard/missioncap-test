@@ -39,7 +39,10 @@ class LoanException1(LoanException):
 
 class LoanException2(LoanException):
     def broken_by_loan(self, loan):
-        return loan.current_index and loan.current_margin != loan.current_interest_rate
+        return (
+            loan.current_index and
+            loan.current_margin != loan.current_interest_rate
+        )
 
     def get_loan_penalty(self, loan):
         # Assume that loan always has a valid category
