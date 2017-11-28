@@ -1,5 +1,5 @@
 from unittest import TestCase
-from models import Loan
+from models import Loan, LoanException1
 from missioncap_parser import parse_into_loan
 from datetime import date
 
@@ -21,6 +21,7 @@ class ParseIntoLoanTest(TestCase):
         self.assertEqual(69.7, loan.current_interest_rate)
         self.assertEqual(71618.01, loan.borrower_income_1)
         self.assertEqual(7926468.41, loan.borrower_income_2)
+        self.assertEqual('L', loan.fitch_product_category)
 
     def get_csv_loan(self):
         return {
@@ -68,3 +69,33 @@ class ParseIntoLoanTest(TestCase):
             'Tenure': 'Feudal',
             'Value of CCJs': '25539.92',
         }
+
+
+class LoanException1Test(TestCase):
+    def setUp(self):
+        self.loan_exception = LoanException1()
+
+    def test_broken_by_loan(self):
+        loan = Loan()
+        loan.maturity_date = date(2017, 1, 1)
+        loan.completion_date = date(2017, 1, 2)
+
+        self.assertTrue(self.loan_exception.broken_by_loan(loan))
+
+    def test_broken_by_loan_completion_before_maturity(self):
+        loan = Loan()
+        loan.maturity_date = date(2017, 1, 2)
+        loan.completion_date = date(2017, 1, 1)
+
+        self.assertFalse(self.loan_exception.broken_by_loan(loan))
+
+    def test_broken_by_loan_completion_equal_maturity(self):
+        loan = Loan()
+        loan.maturity_date = date(2017, 1, 1)
+        loan.completion_date = date(2017, 1, 1)
+
+        self.assertFalse(self.loan_exception.broken_by_loan(loan))
+
+    def test_get_loan_penalty(self):
+        loan = Loan()
+        self.assertEqual(4, self.loan_exception.get_loan_penalty(loan))

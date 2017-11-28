@@ -71,6 +71,11 @@ loan_csv_mapping = [
         'source_field': 'Income Borrower 2',
         'parser': float,
     },
+    {
+        'fieldname': 'fitch_product_category',
+        'source_field': 'Fitch Product Category',
+        'parser': noop,
+    }
 ]
 
 

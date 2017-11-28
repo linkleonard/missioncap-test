@@ -12,6 +12,7 @@ class Loan(object):
         self.current_interest_rate = 0
         self.borrower_income_1 = 0
         self.borrower_income_2 = 0
+        self.fitch_product_category = ''
 
 
 class LoanException(object):
@@ -28,4 +29,14 @@ class LoanException(object):
         return 'LoanException {id}'.format(id=self.id)
 
 
-loan_exceptions = []
+class LoanException1(LoanException):
+    def broken_by_loan(self, loan):
+        return loan.maturity_date < loan.completion_date
+
+    def get_loan_penalty(self, loan):
+        return 4
+
+
+loan_exceptions = [
+    LoanException1(id=1),
+]
