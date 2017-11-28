@@ -60,13 +60,14 @@ def main():
         LoanException4(id=4),
     ]
 
-    with open(output_filename, 'w') as output_file:
+    with open(output_filename, 'w', newline='\n') as output_file:
         with open(loan_database_filename, 'r') as loan_file:
             reader = DictReader(loan_file)
             writer = DictWriter(output_file, fieldnames=output_file_fields)
 
             parsed_loans = (parse_into_loan(row) for row in reader)
             loans_with_exceptions = get_exceptions_for_loans(parsed_loans, loan_exceptions)
+            writer.writeheader()
             writer.writerows(get_loan_report_rows(loans_with_exceptions))
 
 
