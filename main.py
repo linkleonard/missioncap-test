@@ -52,7 +52,6 @@ def get_loan_report_rows(loans_with_exceptions):
 
 
 def main():
-    # TODO: load this file name from CLI arguments
     parser = get_argument_parser()
     args = parser.parse_args()
 
